@@ -54,7 +54,7 @@ def findPixel(inputReader):
         pixelList = ast.literal_eval(cleanPixel(impPixel))
         for url in pixelList: # syncronously loop through each url to get status code
             try:
-                response = requests.head(url, timeout=0.5)
+                response = requests.head(url, timeout=1)
                 statusCodes.append(response.status_code)
             except: 
                 statusCodes.append(404)
