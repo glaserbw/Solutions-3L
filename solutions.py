@@ -2,7 +2,7 @@ import requests
 import csv, os, re, ast, time
 
 # open csv file 
-input = open('tactic.csv')
+input = open('tactic_short.csv')
 inputReader = csv.reader(input)
 
 # function to clean URL before status code check
@@ -10,7 +10,7 @@ def cleanPixel(testUrl):
     # replace forward and back slash with single forward slash
     badSlash = re.compile(r'(\\\/)')
     goodSlash = badSlash.sub('/', testUrl)
-    # replace escape patterns
+    # replace escape character patterns on qutation marks
     badEscape = re.compile(r'\\\"')
     goodEscape = badEscape.sub('', goodSlash)
     # remove double quote marks
@@ -19,10 +19,13 @@ def cleanPixel(testUrl):
     # remove whitespace
     badSpace = re.compile(r'\s')
     goodSpace = badSpace.sub('', goodQuote)
+    # remove edge case bracket single quote error 
+    badStart = re.compile(r'^(\[\D)')
+    goodStart = badStart.sub('["', goodSpace)
 
-    return goodSpace
+    return goodStart
 
-# create csv containing tactics with bad pixels
+# create csv to write pixels with bad tactics
 def badPixel(badResponse):
     with open('badPixels.csv', 'a', newline='') as f: 
         theWriter = csv.writer(f)
@@ -30,6 +33,7 @@ def badPixel(badResponse):
         for sublist in badResponse:
             theWriter.writerow(sublist)     
 
+# Primary function to loop through each url and syncronously get the status code  
 def findPixel(inputReader):
     print('Analyzing Pixels')
     badResponse = []
