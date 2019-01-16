@@ -2,7 +2,7 @@ import requests
 import csv, os, re, ast, time
 
 # open csv file 
-input = open('tactic_short.csv')
+input = open('tactic.csv')
 inputReader = csv.reader(input)
 
 # function to clean URL before status code check
@@ -10,7 +10,7 @@ def cleanPixel(testUrl):
     # replace forward and back slash with single forward slash
     badSlash = re.compile(r'(\\\/)')
     goodSlash = badSlash.sub('/', testUrl)
-    # replace escape character patterns on qutation marks
+    # replace escape character patterns on quotation marks
     badEscape = re.compile(r'\\\"')
     goodEscape = badEscape.sub('', goodSlash)
     # remove double quote marks
@@ -35,35 +35,35 @@ def badPixel(badResponse):
 
 # Primary function to loop through each url and syncronously get the status code  
 def findPixel(inputReader):
-    print('Analyzing Pixels')
+    print('Impression pixel analysis initiated...')
     badResponse = []
     badResponseCount = 0
     rowCount = 0
     for row in inputReader:
         rowCount+=1 
-        # print(rowCount, ' Pixels Analyzed')
-        impPixel = row[8]
+        impPixel = row[8] # impression_pixel_json column 
         statusCodes = []
-        print(rowCount, 'pixels analyzed')
+        if rowCount % 10 == True:
+            print(rowCount-1, 'pixels analyzed...')
         if inputReader.line_num == 1:
-            continue #skip first row
+            continue 
         elif impPixel == '[]':
             continue
         elif impPixel == 'NULL':
             continue
         pixelList = ast.literal_eval(cleanPixel(impPixel))
-        for url in pixelList: #loop through each url to get status code
+        for url in pixelList: # syncronously loop through each url to get status code
             try:
                 response = requests.head(url, timeout=0.5)
                 statusCodes.append(response.status_code)
             except: 
                 statusCodes.append(404)
-        for code in statusCodes: #loop through each status code to see if there's a failure
+        for code in statusCodes: # detect failures 
             if code >= 400:
                 badResponseCount+=1
                 badResponse.append(row)
     badPixel(badResponse)
-    print('Pixel Analysis Complete. ',badResponseCount,' Bad Pixels Found,', rowCount,' Pixels Analyzed')
+    print('Pixel analysis complete. ',badResponseCount,' bad pixels found,', rowCount,' total pixels analyzed')
 
 findPixel(inputReader)
 
