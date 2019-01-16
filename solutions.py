@@ -5,7 +5,7 @@ import csv, os, re, ast, time
 input = open('tactic.csv')
 inputReader = csv.reader(input)
 
-# function to clean URL before status code check
+# helper function to clean URL before status code check
 def cleanPixel(testUrl):
     # replace forward and back slash with single forward slash
     badSlash = re.compile(r'(\\\/)')

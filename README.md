@@ -2,7 +2,7 @@
 
 **Prompt D: Write a script that will programmatically check whether all impressions pixels are valid.**
 
-### Dependencies
+## Dependencies
 - python
 - pip
 - requests 
