@@ -15,4 +15,4 @@
 - Run `python syncSolution.py` in command line
 
 ### Note
-- Current version performs each `GET` check synchronously which has an efficiency of ~5 requests / second. Considering the number of URLs in the tactic.csv document, using an asynchronously library to simultaneously perform `GET` requests would be my optimization strategy to improve performance.
+- Current version performs each `GET` check synchronously which has an efficiency of ~5 requests / second. Considering the number of URLs in the tactic.csv document, using an asynchronous library to simultaneously perform `GET` requests would improve performance. 
