@@ -1,4 +1,4 @@
-# TripleLift Solutions Challenge
+
 
 **Prompt D: Write a script that will programmatically check whether all impressions pixels are valid.**
 
